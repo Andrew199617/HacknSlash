@@ -2,6 +2,7 @@
 
 #include "HacknSlash.h"
 #include "HacknSlashCharacter.h"
+#include "Blueprint/UserWidget.h"
 
 AHacknSlashCharacter::AHacknSlashCharacter()
 {
@@ -37,8 +38,18 @@ AHacknSlashCharacter::AHacknSlashCharacter()
 	GetCharacterMovement()->MaxWalkSpeed = 600.f;
 	GetCharacterMovement()->MaxFlySpeed = 600.f;
 
-	// Note: The skeletal mesh and anim blueprint references on the Mesh component (inherited from Character) 
-	// are set in the derived blueprint asset named MyCharacter (to avoid direct content references in C++)
+}
+
+void AHacknSlashCharacter::BeginPlay()
+{
+	Super::BeginPlay();
+
+}
+
+UUserWidget* AHacknSlashCharacter::SetHud(class UUserWidget* val)
+{
+	hud = val;
+	return hud;
 }
 
 //////////////////////////////////////////////////////////////////////////
