@@ -11,7 +11,6 @@ ABaseCharacter::ABaseCharacter()
 	PrimaryActorTick.bCanEverTick = true;
 
 	health = 100;
-	speed = 100;
 }
 
 // Called when the game starts or when spawned

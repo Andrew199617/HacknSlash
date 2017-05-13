@@ -14,31 +14,22 @@ public:
 	// Sets default values for this character's properties
 	ABaseCharacter();
 
-	int Health() const { return health; }
-	void SetHealth(int val) { health = val; }
-
-	int Shield() const { return shield; }
-	void SetShield(int val) { shield = val; }
-
-	int Speed() const { return speed; }
-	void SetSpeed(int val) { speed = val; }
-
 protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
 
-protected:	
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
 
 private:
-	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Stats", meta = (AllowPrivateAccess = "true"))
-	int health;
 
-	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Stats", meta = (AllowPrivateAccess = "true"))
-	int shield;
-	
-	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Stats", meta = (AllowPrivateAccess = "true"))
-	int speed;
+	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "Stats", meta = (AllowPrivateAccess = "true"))
+	float health;
+
+	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "Stats", meta = (AllowPrivateAccess = "true"))
+	float shield;
+
+	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "Stats", meta = (AllowPrivateAccess = "true"))
+	int ammo;
 	
 };
