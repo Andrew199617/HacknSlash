@@ -61,6 +61,7 @@ void AHacknSlashCharacter::SetupPlayerInputComponent(class UInputComponent* Play
 	PlayerInputComponent->BindAction("Jump", IE_Pressed, this, &ACharacter::Jump);
 	PlayerInputComponent->BindAction("Jump", IE_Released, this, &ACharacter::StopJumping);
 	PlayerInputComponent->BindAxis("MoveRight", this, &AHacknSlashCharacter::MoveRight);
+	PlayerInputComponent->BindAxis("MoveForward", this, &AHacknSlashCharacter::MoveForward);
 
 	PlayerInputComponent->BindTouch(IE_Pressed, this, &AHacknSlashCharacter::TouchStarted);
 	PlayerInputComponent->BindTouch(IE_Released, this, &AHacknSlashCharacter::TouchStopped);
@@ -70,6 +71,12 @@ void AHacknSlashCharacter::MoveRight(float Value)
 {
 	// add movement in that direction
 	AddMovementInput(FVector(0.f,-1.f,0.f), Value);
+}
+
+void AHacknSlashCharacter::MoveForward(float Value)
+{
+	// add movement in that direction
+	AddMovementInput(FVector(-1.f, 0.f, 0.f), Value, true);
 }
 
 void AHacknSlashCharacter::TouchStarted(const ETouchIndex::Type FingerIndex, const FVector Location)

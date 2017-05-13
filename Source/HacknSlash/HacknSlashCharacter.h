@@ -19,7 +19,10 @@ class AHacknSlashCharacter : public ABaseCharacter
 protected:
 
 	/** Called for side to side input */
-	void MoveRight(float Val);
+	void MoveRight(float Speed);
+
+	/** Called for Forward to Backwards input */
+	void MoveForward(float Speed);
 
 	/** Handle touch inputs. */
 	void TouchStarted(const ETouchIndex::Type FingerIndex, const FVector Location);
