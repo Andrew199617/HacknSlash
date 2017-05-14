@@ -16,7 +16,7 @@ ALevelGenerator::ALevelGenerator()
 void ALevelGenerator::BeginPlay()
 {
 	Super::BeginPlay();
-	if (curTile == 0)
+	/*if (curTile == 0)
 	{
 		UWorld* world = GetWorld();
 		if (world)
@@ -25,9 +25,8 @@ void ALevelGenerator::BeginPlay()
 			const FActorSpawnParameters& SpawnParameters = FActorSpawnParameters();
 			const FRotator& Rotation = FRotator();
 			UStaticMesh* mesh = CreateDefaultSubobject<UStaticMesh>(TEXT("Module"));
-			mesh->SetupAttachment(RootComponent);
 		}
-	}
+	}*/
 }
 
 // Called every frame
