@@ -45,14 +45,32 @@ public:
 
 	virtual void BeginPlay() override;
 
-	UFUNCTION(BlueprintPure, Category = "HUD")
+	UFUNCTION(BlueprintPure, Category = "UI")
 	class UUserWidget* Hud() const { return hud; }
 
-	UFUNCTION(BlueprintCallable, Category = "HUD")
+	UFUNCTION(BlueprintCallable, Category = "UI")
 	class UUserWidget* SetHud(class UUserWidget* val);
+
+	virtual void Tick(float DeltaTime) override;
+
+	virtual void EndPlay(const EEndPlayReason::Type EndPlayReason) override;
+
+	void Respawn();
 
 private:
 	class UUserWidget* hud;
 	
-	
+	// The class that will be used for the Game Over UI
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "UI", meta = (AllowPrivateAccess = "true"))
+	TSubclassOf<class UUserWidget> gameOverClass;
+
+	// The instance of the players Game Over Widget
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "UI", meta = (AllowPrivateAccess = "true"))
+	class UUserWidget* gameOverWidget;
+
+	// THe stat that allows the player to respawn.
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Stats", meta = (AllowPrivateAccess = "true"))
+	int lives;
+
+	APlayerController* controller;
 };

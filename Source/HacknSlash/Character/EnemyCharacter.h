@@ -6,14 +6,20 @@
 #include "EnemyCharacter.generated.h"
 
 /**
- * 
+ * Base Enemy Character
  */
 UCLASS()
 class HACKNSLASH_API AEnemyCharacter : public ABaseCharacter
 {
 	GENERATED_BODY()
 	
-	
-	
-	
+	virtual void NotifyActorBeginOverlap(AActor* OtherActor) override;
+
+	virtual void BeginPlay() override;
+
+	virtual void Tick(float DeltaTime) override;
+
+private:
+	class AHacknSlashCharacter* characterRef;
+	//class Weapon* weapon;
 };

@@ -6,8 +6,6 @@
 
 AHacknSlashCharacter::AHacknSlashCharacter()
 {
-	// Set size for collision capsule
-	GetCapsuleComponent()->InitCapsuleSize(42.f, 96.0f);
 
 	// Don't rotate when the controller rotates.
 	bUseControllerRotationPitch = false;
@@ -43,6 +41,7 @@ AHacknSlashCharacter::AHacknSlashCharacter()
 void AHacknSlashCharacter::BeginPlay()
 {
 	Super::BeginPlay();
+	controller = UGameplayStatics::GetPlayerController(GetWorld(), 0);
 
 }
 
@@ -50,6 +49,44 @@ UUserWidget* AHacknSlashCharacter::SetHud(class UUserWidget* val)
 {
 	hud = val;
 	return hud;
+}
+
+void AHacknSlashCharacter::Tick(float DeltaTime)
+{
+	if (health <= 0) 
+	{
+		if (lives <= 0)
+		{
+			hud->RemoveFromViewport();
+
+			if (gameOverClass)
+			{
+				gameOverWidget = CreateWidget<UUserWidget>(controller, gameOverClass);
+				if (gameOverWidget)
+				{
+					gameOverWidget->AddToViewport();
+				}
+			}
+		}
+		else
+		{
+			Respawn();
+		}
+	}
+}
+
+void AHacknSlashCharacter::EndPlay(const EEndPlayReason::Type EndPlayReason)
+{
+	if (lives <= 0) 
+	{
+
+	}
+}
+
+void AHacknSlashCharacter::Respawn()
+{
+	lives--;
+	health = 100;
 }
 
 //////////////////////////////////////////////////////////////////////////

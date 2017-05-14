@@ -14,6 +14,9 @@ public:
 	// Sets default values for this character's properties
 	ABaseCharacter();
 
+	UFUNCTION(BlueprintCallable, Category = "UI")
+	virtual void TakeDamage(int Damage);
+
 protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
@@ -21,7 +24,7 @@ protected:
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
 
-private:
+protected:
 
 	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "Stats", meta = (AllowPrivateAccess = "true"))
 	float health;
