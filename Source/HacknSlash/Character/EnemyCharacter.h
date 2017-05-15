@@ -12,6 +12,9 @@ UCLASS()
 class HACKNSLASH_API AEnemyCharacter : public ABaseCharacter
 {
 	GENERATED_BODY()
+
+public:
+	AEnemyCharacter();
 	
 	virtual void NotifyActorBeginOverlap(AActor* OtherActor) override;
 

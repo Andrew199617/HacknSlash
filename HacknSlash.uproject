@@ -15,13 +15,5 @@
 		}
 	],
 	"Plugins": [
-		{
-			"Name": "PerforceSourceControl",
-			"Enabled": false
-		},
-		{
-			"Name": "SubversionSourceControl",
-			"Enabled": false
-		}
 	]
 }

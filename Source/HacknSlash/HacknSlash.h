@@ -3,6 +3,6 @@
 #ifndef __HACKNSLASH_H__
 #define __HACKNSLASH_H__
 
-#include "EngineMinimal.h"
+#include "Engine.h"
 				   
 #endif

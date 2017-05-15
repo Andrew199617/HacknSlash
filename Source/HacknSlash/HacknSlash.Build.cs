@@ -6,6 +6,6 @@ public class HacknSlash : ModuleRules
 {
 	public HacknSlash(TargetInfo Target)
 	{
-		PublicDependencyModuleNames.AddRange(new string[] { "Core", "CoreUObject", "Engine", "InputCore", "UMG", "Slate", "SlateCore" });
-	}
+		PublicDependencyModuleNames.AddRange(new string[] { "Core", "CoreUObject", "Engine", "InputCore", "AIModule", "GameplayTasks" , "UMG", "Slate", "SlateCore" });
+    }
 }
