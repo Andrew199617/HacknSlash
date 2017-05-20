@@ -7,10 +7,17 @@
 
 ANewLevelCollider::ANewLevelCollider()
 {
+	levelGeneratorRef = 0;
 }
 
 void ANewLevelCollider::BeginPlay()
 {
+	for (TActorIterator<ALevelGenerator> ActorItr(GetWorld()); ActorItr; ++ActorItr)
+	{
+		// Same as with the Object Iterator, access the subclass instance with the * or -> operators.
+		levelGeneratorRef = *ActorItr;
+		break;
+	}
 	characterRef = Cast<AHacknSlashCharacter>(UGameplayStatics::GetPlayerCharacter(GetWorld(), 0));
 	GetStaticMeshComponent()->SetHiddenInGame(true);
 }
@@ -19,7 +26,9 @@ void ANewLevelCollider::NotifyActorBeginOverlap(AActor* OtherActor)
 {
 	if (OtherActor->GetName() == characterRef->GetName())
 	{
-		levelGeneratorRef->SpawnNextTile();
-		levelGeneratorRef->UnSpawnLastTile();
+		if (levelGeneratorRef)
+		{
+			levelGeneratorRef->SpawnNextTile();
+		}
 	}
 }

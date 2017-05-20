@@ -13,10 +13,12 @@ ABaseCharacter::ABaseCharacter() : ACharacter()
  	// Set this character to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
 	PrimaryActorTick.bCanEverTick = true;
 
-	health = 100;
+	maxHP = 100;
+	health = maxHP;
+	shield = maxHP;
 }
 
-void ABaseCharacter::TakeDamage(int Damage)
+void ABaseCharacter::RecieveDamage(int Damage)
 {
 
 	if (Damage > 0) {
@@ -35,6 +37,26 @@ void ABaseCharacter::TakeDamage(int Damage)
 			health -= Damage;
 		}
 	}
+	else {
+		GEngine->AddOnScreenDebugMessage(-1, 2.f, FColor::Blue, TEXT("Dealing negative damage."));
+	}
+}
+
+void ABaseCharacter::Heal(int Amount)
+{
+	if (Amount > 0)
+	{
+		health += Amount;
+		health = FMath::Clamp<float>(health, 0.0f, maxHP);
+	}
+	else {
+		GEngine->AddOnScreenDebugMessage(-1, 2.f, FColor::Blue, TEXT("Healing negative damage."));
+	}
+}
+
+int ABaseCharacter::GetMaxHP() const
+{
+	return maxHP;
 }
 
 // Called when the game starts or when spawned
