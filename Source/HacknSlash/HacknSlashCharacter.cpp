@@ -3,6 +3,7 @@
 #include "HacknSlash.h"
 #include "HacknSlashCharacter.h"
 #include "Blueprint/UserWidget.h"
+#include <string>
 
 AHacknSlashCharacter::AHacknSlashCharacter()
 {
@@ -53,6 +54,8 @@ UUserWidget* AHacknSlashCharacter::SetHud(class UUserWidget* val)
 
 void AHacknSlashCharacter::Tick(float DeltaTime)
 {
+	/*std::string str = "Health: " + std::to_string(health);
+	GEngine->AddOnScreenDebugMessage(-1, 2.f, FColor::Green,str.c_str());*/
 	if (health <= 0) 
 	{
 		if (lives <= 0)
