@@ -6,7 +6,7 @@
 
 
 
-ABaseWeapon::ABaseWeapon()
+ABaseWeapon::ABaseWeapon() : ABasePickup()
 {
 	bShouldDestroy = false;
 }

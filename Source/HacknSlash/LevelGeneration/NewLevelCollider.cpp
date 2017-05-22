@@ -10,25 +10,35 @@ ANewLevelCollider::ANewLevelCollider()
 	levelGeneratorRef = 0;
 }
 
-void ANewLevelCollider::BeginPlay()
+void ANewLevelCollider::SetLevelGeneratorRef(class ALevelGenerator* val)
 {
-	for (TActorIterator<ALevelGenerator> ActorItr(GetWorld()); ActorItr; ++ActorItr)
-	{
-		// Same as with the Object Iterator, access the subclass instance with the * or -> operators.
-		levelGeneratorRef = *ActorItr;
-		break;
-	}
-	characterRef = Cast<AHacknSlashCharacter>(UGameplayStatics::GetPlayerCharacter(GetWorld(), 0));
-	GetStaticMeshComponent()->SetHiddenInGame(true);
+	levelGeneratorRef = val;
 }
 
-void ANewLevelCollider::NotifyActorBeginOverlap(AActor* OtherActor)
+void ANewLevelCollider::BeginPlay()
 {
-	if (OtherActor->GetName() == characterRef->GetName())
+	characterRef = Cast<AHacknSlashCharacter>(UGameplayStatics::GetPlayerCharacter(GetWorld(), 0));
+	GetStaticMeshComponent()->Mobility = EComponentMobility::Movable;
+	GetStaticMeshComponent()->bGenerateOverlapEvents = true;
+	GetStaticMeshComponent()->SetCollisionProfileName("OverlapAllDynamic");
+	GetStaticMeshComponent()->bEditableWhenInherited = true;
+	GetStaticMeshComponent()->CastShadow = false;
+	GetStaticMeshComponent()->bHiddenInGame = true;
+	GetStaticMeshComponent()->SetRelativeScale3D(FVector(10, 1, 10));
+}
+
+void ANewLevelCollider::NotifyActorEndOverlap(AActor* OtherActor)
+{
+	Super::NotifyActorEndOverlap(OtherActor);
+
+	if (OtherActor->GetName() == characterRef->GetName() && levelGeneratorRef)
 	{
-		if (levelGeneratorRef)
+		if (characterRef->GetActorLocation().Y < GetActorLocation().Y)
 		{
 			levelGeneratorRef->SpawnNextTile();
+		}
+		else {
+			levelGeneratorRef->SpawnLastTile();
 		}
 	}
 }

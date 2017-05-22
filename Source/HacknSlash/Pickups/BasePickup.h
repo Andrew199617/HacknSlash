@@ -26,10 +26,14 @@ protected:
 
 	void DestroySafe();
 
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Mesh", meta = (AllowPrivateAccess = "true"))
+	UStaticMeshComponent* mesh;
+
 protected:
 
 	class AHacknSlashCharacter* playerCharacter;
 
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Mesh", meta = (AllowPrivateAccess = "true"))
 	USphereComponent* collider;
 
 	/************************************************************************/

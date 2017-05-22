@@ -20,6 +20,12 @@ public:
 	UFUNCTION(BlueprintCallable, Category = "Combat")
 	void Heal(int Amount);
 
+	/************************************************************************/
+	/* Used to give the player more shield                                 */
+	/************************************************************************/
+	UFUNCTION(BlueprintCallable, Category = "Combat")
+	void Recharge(int Amount);
+
 	UFUNCTION(BlueprintPure, Category = "Stats")
 	int GetMaxHP() const;
 protected:
@@ -43,5 +49,8 @@ protected:
 private:
 	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "Stats", meta = (AllowPrivateAccess = "true"))
 	int maxHP;
+
+	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "Stats", meta = (AllowPrivateAccess = "true"))
+	int maxShield;
 
 };

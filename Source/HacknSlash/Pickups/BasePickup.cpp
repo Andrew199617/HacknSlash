@@ -17,6 +17,12 @@ ABasePickup::ABasePickup()
 	collider = CreateDefaultSubobject<USphereComponent>(TEXT("SphereCollider"));
 	collider->SetSphereRadius(pickupRadius);
 	collider->SetupAttachment(RootComponent);
+
+	mesh = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("Mesh"));
+	mesh->SetupAttachment(RootComponent);
+	mesh->SetCollisionProfileName("OverlapAllDynamic");
+
+	bShouldDestroy = true;
 }
 
 // Called when the game starts or when spawned
@@ -26,7 +32,6 @@ void ABasePickup::BeginPlay()
 
 	collider->SetSphereRadius(pickupRadius);
 	playerCharacter = Cast<AHacknSlashCharacter>(UGameplayStatics::GetPlayerCharacter(GetWorld(), 0));
-	bShouldDestroy = true;
 }
 
 void ABasePickup::OnPickup(AActor* OtherActor)
