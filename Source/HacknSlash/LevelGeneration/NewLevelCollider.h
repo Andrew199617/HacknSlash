@@ -17,17 +17,15 @@ public:
 	// Sets default values for this actor's properties
 	ANewLevelCollider();
 
+	void SetLevelGeneratorRef(class ALevelGenerator* val);
 protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
 
-	virtual void NotifyActorBeginOverlap(AActor* OtherActor) override;
+	virtual void NotifyActorEndOverlap(AActor* OtherActor) override;
 
 private:
 	class AHacknSlashCharacter* characterRef;
-
-	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "LevelGeneration", meta = (AllowPrivateAccess = "true"))
-	TSubclassOf<class ALevelGenerator> levelGenerator;
 
 	class ALevelGenerator* levelGeneratorRef;
 };

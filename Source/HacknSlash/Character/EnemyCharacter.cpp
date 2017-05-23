@@ -22,7 +22,7 @@ void AEnemyCharacter::NotifyActorBeginOverlap(AActor* OtherActor)
 	{
 		if (OtherActor->GetName() == characterRef->GetName())
 		{
-			characterRef->TakeDamage(25);
+			characterRef->RecieveDamage(15);
 		}
 	}
 }
@@ -36,9 +36,4 @@ void AEnemyCharacter::BeginPlay()
 void AEnemyCharacter::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
-	//FVector myLocation = GetActorLocation();
-	//FVector direction = characterRef->GetActorLocation() - myLocation;
-	//direction.Normalize(); 
-	//FVector Vel = (direction * 10 * DeltaTime);
-	//SetActorLocation(myLocation + Vel);
 }

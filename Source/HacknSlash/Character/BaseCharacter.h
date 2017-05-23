@@ -14,9 +14,20 @@ public:
 	// Sets default values for this character's properties
 	ABaseCharacter();
 
-	UFUNCTION(BlueprintCallable, Category = "UI")
-	virtual void TakeDamage(int Damage);
+	UFUNCTION(BlueprintCallable, Category = "Combat")
+	void RecieveDamage(int Damage);
 
+	UFUNCTION(BlueprintCallable, Category = "Combat")
+	void Heal(int Amount);
+
+	/************************************************************************/
+	/* Used to give the player more shield                                 */
+	/************************************************************************/
+	UFUNCTION(BlueprintCallable, Category = "Combat")
+	void Recharge(int Amount);
+
+	UFUNCTION(BlueprintPure, Category = "Stats")
+	int GetMaxHP() const;
 protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
@@ -34,5 +45,12 @@ protected:
 
 	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "Stats", meta = (AllowPrivateAccess = "true"))
 	int ammo;
-	
+
+private:
+	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "Stats", meta = (AllowPrivateAccess = "true"))
+	int maxHP;
+
+	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "Stats", meta = (AllowPrivateAccess = "true"))
+	int maxShield;
+
 };

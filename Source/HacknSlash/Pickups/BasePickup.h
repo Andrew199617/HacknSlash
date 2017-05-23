@@ -14,25 +14,38 @@ public:
 	// Sets default values for this actor's properties
 	ABasePickup();
 
+	// Called every frame
+	virtual void Tick(float DeltaTime) override;
+	
 protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
 
-public:	
-	// Called every frame
-	virtual void Tick(float DeltaTime) override;
+	//Called when the player collides with this
+	virtual void OnPickup(AActor* OtherActor);
 
-	virtual void OnPickup();
+	void DestroySafe();
 
-	virtual void NotifyActorBeginOverlap(AActor* OtherActor) override;
-	
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Mesh", meta = (AllowPrivateAccess = "true"))
+	UStaticMeshComponent* mesh;
+
 protected:
-	static class AHacknSlashCharacter* playerCharacter;
 
+	class AHacknSlashCharacter* playerCharacter;
+
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Mesh", meta = (AllowPrivateAccess = "true"))
 	USphereComponent* collider;
 
+	/************************************************************************/
+	/* Will the pickup be destroyed when its walked over.*/
+	/************************************************************************/
+	bool bShouldDestroy;
+
 private:
-	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, meta = (AllowPrivateAccess = "true"))
+
+	void NotifyActorBeginOverlap(AActor* OtherActor) override;
+
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, meta = (AllowPrivateAccess = "true"))
 	float pickupRadius;
 	
 

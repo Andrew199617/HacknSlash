@@ -13,7 +13,12 @@ class HACKNSLASH_API ABaseWeapon : public ABasePickup
 {
 	GENERATED_BODY()
 	
-	
-	
-	
+public:
+	ABaseWeapon();
+
+	virtual void OnPickup(AActor* OtherActor) override;
+
+
+private:
+
 };

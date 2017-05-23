@@ -54,8 +54,8 @@ UUserWidget* AHacknSlashCharacter::SetHud(class UUserWidget* val)
 
 void AHacknSlashCharacter::Tick(float DeltaTime)
 {
-	/*std::string str = "Health: " + std::to_string(health);
-	GEngine->AddOnScreenDebugMessage(-1, 2.f, FColor::Green,str.c_str());*/
+	Super::Tick(DeltaTime);
+
 	if (health <= 0) 
 	{
 		if (lives <= 0)
@@ -89,7 +89,7 @@ void AHacknSlashCharacter::EndPlay(const EEndPlayReason::Type EndPlayReason)
 void AHacknSlashCharacter::Respawn()
 {
 	lives--;
-	health = 100;
+	health = GetMaxHP();
 }
 
 //////////////////////////////////////////////////////////////////////////
@@ -109,13 +109,11 @@ void AHacknSlashCharacter::SetupPlayerInputComponent(class UInputComponent* Play
 
 void AHacknSlashCharacter::MoveRight(float Value)
 {
-	// add movement in that direction
 	AddMovementInput(FVector(0.f,-1.f,0.f), Value);
 }
 
 void AHacknSlashCharacter::MoveForward(float Value)
 {
-	// add movement in that direction
 	AddMovementInput(FVector(-1.f, 0.f, 0.f), Value, true);
 }
 
