@@ -42,6 +42,8 @@ private:
 
 	void SetModuleGeneratorLocations(FVector newLocation);
 
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Spawn Configuration", meta = (AllowPrivateAccess = "true"))
+	class USpawnConfiguration* spawnConfiguration;
 public:
 	//Modules
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = "Modules", meta = (AllowPrivateAccess = "true"))
@@ -63,16 +65,11 @@ public:
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = "Colliders", meta = (AllowPrivateAccess = "true"))
 	class ANewLevelCollider* nextModuleGenerator;
 
-	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = "NavMesh", meta = (AllowPrivateAccess = "true"))
-	class ANavMeshBoundsVolume* navMesh;
-
-	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = "Spawns", meta = (AllowPrivateAccess = "true"))
-	USceneComponent* spawns;
-
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = "Colliders", meta = (AllowPrivateAccess = "true"))
 	class UColliderGenerator* colliders;
 
-	
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Nav Mesh", meta = (AllowPrivateAccess = "true"))
+	UBoxComponent* navMeshDisplay;
 private:
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "LevelGeneration", meta = (AllowPrivateAccess = "true"))
 	TArray<UStaticMesh*> spawnableMeshes;
@@ -89,5 +86,7 @@ private:
 
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "LevelGeneration", meta = (AllowPrivateAccess = "true"))
 	float moduleWidth;
+
+	class ANavMeshBoundsVolume* navMesh;
 
 };

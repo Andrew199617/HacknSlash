@@ -12,6 +12,8 @@ AEnemyCharacter::AEnemyCharacter() : ABaseCharacter()
 
 	GetMovementComponent()->NavAgentProps.AgentRadius = 42;
 	GetMovementComponent()->NavAgentProps.AgentHeight = 192;
+
+	characterRef = 0;
 }
 
 void AEnemyCharacter::NotifyActorBeginOverlap(AActor* OtherActor)
@@ -20,7 +22,7 @@ void AEnemyCharacter::NotifyActorBeginOverlap(AActor* OtherActor)
 
 	if (OtherActor && (OtherActor != this))
 	{
-		if (OtherActor->GetName() == characterRef->GetName())
+		if (characterRef && OtherActor->GetName() == characterRef->GetName())
 		{
 			characterRef->RecieveDamage(15);
 		}
@@ -36,4 +38,9 @@ void AEnemyCharacter::BeginPlay()
 void AEnemyCharacter::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
+
+	if (health <= 0)
+	{
+		Destroy();
+	}
 }

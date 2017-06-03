@@ -6,6 +6,7 @@
 #include "NewLevelCollider.h"
 #include "ColliderGenerator.h"
 #include "AI/Navigation/NavMeshBoundsVolume.h"
+#include "SpawnConfiguration.h"
 
 
 // Sets default values
@@ -17,11 +18,21 @@ ALevelGenerator::ALevelGenerator()
 	RootComponent = CreateDefaultSubobject<USceneComponent>(TEXT("Root"));
 
 	InitializeModules();
+
+	spawnConfiguration = CreateDefaultSubobject<USpawnConfiguration>(TEXT("Spawn Configuration"));
+	AddOwnedComponent(spawnConfiguration);
+
 	colliders = CreateDefaultSubobject<UColliderGenerator>(TEXT("Collider Generator"));
 	AddOwnedComponent(colliders);
 	colliders->root->SetupAttachment(RootComponent);
-
+	colliders->root->RegisterComponent();
+	
 	InitializeSpawns();
+
+	navMeshDisplay = CreateDefaultSubobject<UBoxComponent>(TEXT("Nav Mesh Display"));
+	navMeshDisplay->SetupAttachment(RootComponent);
+	navMeshDisplay->SetBoxExtent(FVector(100, 100, 100), false);
+	navMeshDisplay->RegisterComponent();
 
 	curTile = 0;
 	moduleWidth = 5000;
@@ -41,8 +52,12 @@ void ALevelGenerator::BeginPlay()
 		spawnParams.Owner = this;
 
 		navMesh = world->SpawnActor<ANavMeshBoundsVolume>(spawnParams);
-		navMesh->SetActorScale3D(FVector(10, 150, 10));
-		world->GetNavigationSystem()->OnNavigationBoundsUpdated(navMesh);
+		UNavigationSystem* NavSys = UNavigationSystem::GetCurrent(GetWorld());
+		NavSys->OnNavigationBoundsUpdated(navMesh);
+		navMesh->SetActorScale3D(navMeshDisplay->GetRelativeTransform().GetScale3D());
+		navMesh->SetActorLocation(navMeshDisplay->GetRelativeTransform().GetLocation() + GetActorLocation());
+		navMesh->GetBrushComponent()->Mobility = EComponentMobility::Movable;
+		navMeshDisplay->DestroyComponent();
 	}
 }
 
@@ -52,12 +67,17 @@ void ALevelGenerator::OnConstruction(const FTransform& Transform)
 	if (spawnableMeshes.Num() > 0)
 	{
 		FVector transLoc = Transform.GetLocation();
+
 		lastModule->SetStaticMesh(spawnableMeshes[0]);
 		lastModule->SetRelativeLocation(FVector(0, moduleWidth, 0) + transLoc);
+
 		currentModule->SetStaticMesh(spawnableMeshes[0]);
-		currentModule->SetRelativeLocation(FVector(0, 0, 0) + transLoc);
+		currentModule->SetRelativeLocation(transLoc);
+
 		nextModule->SetStaticMesh(spawnableMeshes[0]);
 		nextModule->SetRelativeLocation(FVector(0, -moduleWidth, 0) + transLoc);
+
+		navMeshDisplay->SetRelativeLocation(navMeshDisplay->GetRelativeTransform().GetLocation() + transLoc);
 	}
 	colliders->OnConstruction(Transform);
 }
@@ -128,8 +148,8 @@ void ALevelGenerator::SetCurTile(int tile)
 void ALevelGenerator::InitializeModules()
 {
 	modulesRoot = CreateDefaultSubobject<USceneComponent>(TEXT("Modules"));
-	modulesRoot->RegisterComponent();
 	modulesRoot->SetupAttachment(RootComponent);
+	modulesRoot->RegisterComponent();
 
 	lastModule = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("Last Module"));
 	SetupModule(lastModule);
@@ -141,11 +161,11 @@ void ALevelGenerator::InitializeModules()
 
 void ALevelGenerator::SetupModule(UStaticMeshComponent* mesh)
 {
-	mesh->RegisterComponent();
 	mesh->Mobility = EComponentMobility::Movable;
 	mesh->bGenerateOverlapEvents = false;
 	mesh->bEditableWhenInherited = true;
 	mesh->SetupAttachment(modulesRoot);
+	mesh->RegisterComponent();
 }
 
 void ALevelGenerator::SpawnColliders()
@@ -172,8 +192,7 @@ void ALevelGenerator::SpawnColliders()
 
 void ALevelGenerator::InitializeSpawns()
 {
-	spawns = CreateDefaultSubobject<USceneComponent>(TEXT("Spawns"));
-	spawns->SetupAttachment(RootComponent);
+	
 }
 
 void ALevelGenerator::SetModuleGeneratorLocations(FVector newLocation)

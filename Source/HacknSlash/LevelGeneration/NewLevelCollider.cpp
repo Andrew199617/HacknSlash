@@ -23,6 +23,7 @@ void ANewLevelCollider::BeginPlay()
 	GetStaticMeshComponent()->SetCollisionProfileName("OverlapAllDynamic");
 	GetStaticMeshComponent()->bEditableWhenInherited = true;
 	GetStaticMeshComponent()->CastShadow = false;
+	GetStaticMeshComponent()->bCastDynamicShadow = false;
 	GetStaticMeshComponent()->bHiddenInGame = true;
 	GetStaticMeshComponent()->SetRelativeScale3D(FVector(10, 1, 10));
 }

@@ -37,6 +37,8 @@ AHacknSlashCharacter::AHacknSlashCharacter()
 	GetCharacterMovement()->MaxWalkSpeed = 600.f;
 	GetCharacterMovement()->MaxFlySpeed = 600.f;
 
+	lives = 3;
+
 }
 
 void AHacknSlashCharacter::BeginPlay()
@@ -52,32 +54,6 @@ UUserWidget* AHacknSlashCharacter::SetHud(class UUserWidget* val)
 	return hud;
 }
 
-void AHacknSlashCharacter::Tick(float DeltaTime)
-{
-	Super::Tick(DeltaTime);
-
-	if (health <= 0) 
-	{
-		if (lives <= 0)
-		{
-			hud->RemoveFromViewport();
-
-			if (gameOverClass)
-			{
-				gameOverWidget = CreateWidget<UUserWidget>(controller, gameOverClass);
-				if (gameOverWidget)
-				{
-					gameOverWidget->AddToViewport();
-				}
-			}
-		}
-		else
-		{
-			Respawn();
-		}
-	}
-}
-
 void AHacknSlashCharacter::EndPlay(const EEndPlayReason::Type EndPlayReason)
 {
 	if (lives <= 0) 
@@ -90,6 +66,41 @@ void AHacknSlashCharacter::Respawn()
 {
 	lives--;
 	health = GetMaxHP();
+}
+
+void AHacknSlashCharacter::NotifyActorBeginOverlap(AActor* OtherActor)
+{
+	Super::NotifyActorBeginOverlap(OtherActor);
+
+	if (OtherActor != this)
+	{
+		ABaseCharacter* base = Cast<ABaseCharacter>(OtherActor);
+		if (base)
+		{
+			base->RecieveDamage(15);
+		}
+	}
+}
+
+void AHacknSlashCharacter::Died()
+{
+	if (lives <= 0)
+	{
+		hud->RemoveFromViewport();
+
+		if (gameOverClass)
+		{
+			gameOverWidget = CreateWidget<UUserWidget>(controller, gameOverClass);
+			if (gameOverWidget)
+			{
+				gameOverWidget->AddToViewport();
+			}
+		}
+	}
+	else
+	{
+		Respawn();
+	}
 }
 
 //////////////////////////////////////////////////////////////////////////

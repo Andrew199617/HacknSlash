@@ -9,7 +9,6 @@ UColliderGenerator::UColliderGenerator()
 {
 	root = CreateDefaultSubobject<USceneComponent>(TEXT("Colliders"));
 	root->bEditableWhenInherited = true;
-	root->RegisterComponent();
 
 	topCollider = CreateDefaultSubobject<UBoxComponent>(TEXT("Top Collider"));
 	SetupCollider(topCollider);
@@ -39,15 +38,15 @@ void UColliderGenerator::SetRelativeLocation(FVector newLocation)
 
 void UColliderGenerator::SetupCollider(UBoxComponent* mesh)
 {
-	mesh->RegisterComponent();
+	mesh->SetupAttachment(root);
 	mesh->Mobility = EComponentMobility::Movable;
 	mesh->bGenerateOverlapEvents = false;
 	mesh->SetCollisionProfileName(TEXT("InvisibleWall"));
 	mesh->bEditableWhenInherited = true;
 	mesh->CastShadow = false;
 	mesh->bHiddenInGame = true;
-	mesh->SetBoxExtent(FVector(100, 100, 100),false);
-	mesh->SetupAttachment(root);
+	mesh->SetBoxExtent(FVector(100, 100, 100), false);
+	mesh->RegisterComponent();
 }
 
 void UColliderGenerator::BeginPlay()

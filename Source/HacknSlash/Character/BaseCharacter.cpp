@@ -36,6 +36,10 @@ void ABaseCharacter::RecieveDamage(int Damage)
 		}
 		else {
 			health -= Damage;
+			if (health <= 0)
+			{
+				Died();
+			}
 		}
 	}
 	else {
@@ -84,4 +88,9 @@ void ABaseCharacter::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
 
+}
+
+void ABaseCharacter::Died()
+{
+	GEngine->AddOnScreenDebugMessage(-1, 2.f, FColor::Blue, TEXT("Character Died Implement Method."));
 }

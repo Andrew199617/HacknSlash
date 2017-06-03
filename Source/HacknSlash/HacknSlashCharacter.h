@@ -51,11 +51,13 @@ public:
 	UFUNCTION(BlueprintCallable, Category = "UI")
 	class UUserWidget* SetHud(class UUserWidget* val);
 
-	virtual void Tick(float DeltaTime) override;
-
 	virtual void EndPlay(const EEndPlayReason::Type EndPlayReason) override;
 
 	void Respawn();
+
+	virtual void NotifyActorBeginOverlap(AActor* OtherActor) override;
+
+	virtual void Died() override;
 
 private:
 	class UUserWidget* hud;
