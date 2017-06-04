@@ -7,7 +7,8 @@
 #include "ColliderGenerator.h"
 #include "AI/Navigation/NavMeshBoundsVolume.h"
 #include "SpawnConfiguration.h"
-
+#include <ctime> 
+#include <string> 
 
 // Sets default values
 ALevelGenerator::ALevelGenerator()
@@ -71,10 +72,10 @@ void ALevelGenerator::OnConstruction(const FTransform& Transform)
 		lastModule->SetStaticMesh(spawnableMeshes[0]);
 		lastModule->SetRelativeLocation(FVector(0, moduleWidth, 0) + transLoc);
 
-		currentModule->SetStaticMesh(spawnableMeshes[0]);
+		currentModule->SetStaticMesh(spawnableMeshes[1]);
 		currentModule->SetRelativeLocation(transLoc);
 
-		nextModule->SetStaticMesh(spawnableMeshes[0]);
+		nextModule->SetStaticMesh(spawnableMeshes[2]);
 		nextModule->SetRelativeLocation(FVector(0, -moduleWidth, 0) + transLoc);
 
 		navMeshDisplay->SetRelativeLocation(navMeshDisplay->GetRelativeTransform().GetLocation() + transLoc);
@@ -89,7 +90,11 @@ void ALevelGenerator::SpawnNextTile()
 		curTile++;
 
 		lastModule->SetRelativeLocation(FVector(0, curTile * -moduleWidth - moduleWidth, 0));
-		lastModule->SetStaticMesh(spawnableMeshes[0]);
+		srand((unsigned)time(0));
+		int random_integer = rand() % spawnableMeshes.Num();
+		GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Blue, std::to_string(random_integer).c_str());
+		
+		lastModule->SetStaticMesh(spawnableMeshes[random_integer]);
 
 		UStaticMeshComponent* temp = lastModule;
 		lastModule = currentModule;
