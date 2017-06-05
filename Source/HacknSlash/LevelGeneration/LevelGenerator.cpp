@@ -67,7 +67,8 @@ void ALevelGenerator::OnConstruction(const FTransform& Transform)
 	Super::OnConstruction(Transform);
 	if (spawnableMeshes.Num() > 0)
 	{
-		FVector transLoc = Transform.GetLocation();
+		FTransform com = Transform.GetRelativeTransform(this->GetTransform());
+		FVector transLoc = Transform.GetLocation() + com.GetLocation();
 
 		lastModule->SetStaticMesh(spawnableMeshes[0]);
 		lastModule->SetRelativeLocation(FVector(0, moduleWidth, 0) + transLoc);
