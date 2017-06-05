@@ -67,82 +67,27 @@ void ALevelGeneration2::OnConstruction(const FTransform& Transform)
 			nextModule->SetStaticMesh(spawnableMeshes[2]);
 			nextModule->SetRelativeLocation(FVector(0, -moduleWidth, 0) + transLoc + spawnableMeshOffsets[2]);
 
+			static float* nums = new float[maxTiles] {0};
 			srand((unsigned)time(0));
 			for (int i = 0; i < maxTiles; ++i)
 			{
-				int random_integer = rand() % spawnableMeshes.Num();
-				meshes[i]->SetStaticMesh(spawnableMeshes[random_integer]);
+				if (nums[i] == 0)
+				{
+					int random_integer = rand() % spawnableMeshes.Num();
+					nums[i] = random_integer;
+					meshes[i]->SetStaticMesh(spawnableMeshes[random_integer]);
+				}
+				else
+				{
+					meshes[i]->SetStaticMesh(spawnableMeshes[nums[i]]);
+				}
 				FVector newLocation = (spawnableMeshOffsets.Num() > i + 3) ? FVector(0, -((i + 2) * moduleWidth), 0) + transLoc + spawnableMeshOffsets[i + 3] : FVector(0, -((i + 2) * moduleWidth), 0) + transLoc;
-				nextModule->SetRelativeLocation(newLocation);
+				meshes[i]->SetRelativeLocation(newLocation);
 			}
 		}
 
 	}
 	colliders->OnConstruction(Transform);
-}
-
-void ALevelGeneration2::SpawnNextTile()
-{
-	if (curTile < maxTiles)
-	{
-		curTile++;
-
-		lastModule->SetRelativeLocation(FVector(0, curTile * -moduleWidth - moduleWidth, 0));
-		srand((unsigned)time(0));
-		int random_integer = rand() % spawnableMeshes.Num();
-		GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Blue, std::to_string(random_integer).c_str());
-
-		lastModule->SetStaticMesh(spawnableMeshes[random_integer]);
-
-		UStaticMeshComponent* temp = lastModule;
-		lastModule = currentModule;
-		currentModule = nextModule;
-		nextModule = temp;
-
-		FVector newLocation = FVector(0, curTile * -moduleWidth, 0);
-		colliders->SetRelativeLocation(newLocation);
-	}
-	else {
-		GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Blue, TEXT("End of level reached"));
-	}
-
-}
-
-void ALevelGeneration2::SpawnLastTile()
-{
-	if (curTile > 0)
-	{
-		curTile--;
-
-		nextModule->SetRelativeLocation(FVector(0, curTile * -moduleWidth + moduleWidth, 0));
-		nextModule->SetStaticMesh(spawnableMeshes[0]);
-
-		UStaticMeshComponent* temp = nextModule;
-		nextModule = currentModule;
-		currentModule = lastModule;
-		lastModule = temp;
-
-		FVector newLocation = FVector(0, curTile * -moduleWidth, 0);
-		colliders->SetRelativeLocation(newLocation);
-		navMesh->SetActorLocation(newLocation + GetActorLocation());
-	}
-	else {
-		GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Blue, TEXT("End of level reached"));
-	}
-}
-
-void ALevelGeneration2::SetCurTile(int tile)
-{
-	if (tile < 0 || tile >= maxTiles)
-	{
-		GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Blue, TEXT("Could not set tile."));
-		return;
-	}
-	curTile = tile;
-
-	lastModule->SetRelativeLocation(FVector(0, curTile * -moduleWidth + moduleWidth, 0));
-	currentModule->SetRelativeLocation(FVector(0, curTile * -moduleWidth, 0));
-	nextModule->SetRelativeLocation(FVector(0, curTile * -moduleWidth - moduleWidth, 0));
 }
 
 void ALevelGeneration2::InitializeModules()
@@ -160,7 +105,7 @@ void ALevelGeneration2::InitializeModules()
 
 	for (int i = 0; i < maxTiles; ++i)
 	{
-		meshes[i] = CreateDefaultSubobject<UStaticMeshComponent>(("Module" + std::to_string(i)).c_str());
+		int index = meshes.Add(CreateDefaultSubobject<UStaticMeshComponent>(("Module" + std::to_string(i)).c_str()));
 		SetupModule(meshes[i]);
 	}
 }

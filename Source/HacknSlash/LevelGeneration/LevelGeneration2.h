@@ -20,13 +20,6 @@ protected:
 
 	virtual void OnConstruction(const FTransform& Transform) override;
 
-public:	
-	void SpawnNextTile();
-
-	void SpawnLastTile();
-
-	void SetCurTile(int tile);
-
 private:
 	//Called to add modules as a subcomponent
 	void InitializeModules();
