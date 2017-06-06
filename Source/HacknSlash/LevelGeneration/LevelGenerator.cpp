@@ -81,7 +81,7 @@ void ALevelGenerator::OnConstruction(const FTransform& Transform)
 
 		navMeshDisplay->SetRelativeLocation(navMeshDisplay->GetRelativeTransform().GetLocation() + transLoc);
 	}
-	colliders->OnConstruction(Transform);
+	colliders->OnConstruction(Transform, maxTiles);
 }
 
 void ALevelGenerator::SpawnNextTile()

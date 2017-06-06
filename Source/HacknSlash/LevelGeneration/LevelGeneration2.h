@@ -69,7 +69,7 @@ private:
 	UStaticMesh* colliderMesh;
 
 	//Level Generation
-	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "LevelGeneration", meta = (AllowPrivateAccess = "true"))
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "LevelGeneration", meta = (AllowPrivateAccess = "true"))
 	float maxTiles;
 
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "LevelGeneration", meta = (AllowPrivateAccess = "true"))

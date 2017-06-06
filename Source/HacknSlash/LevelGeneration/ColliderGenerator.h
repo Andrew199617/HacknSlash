@@ -15,7 +15,7 @@ public:
 	// Sets default values for this component's properties
 	UColliderGenerator();
 
-	void OnConstruction(const FTransform& Transform);
+	void OnConstruction(const FTransform& Transform, int maxTiles);
 
 	void SetRelativeLocation(FVector newLocation);
 

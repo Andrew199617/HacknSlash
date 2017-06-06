@@ -67,27 +67,36 @@ void ALevelGeneration2::OnConstruction(const FTransform& Transform)
 			nextModule->SetStaticMesh(spawnableMeshes[2]);
 			nextModule->SetRelativeLocation(FVector(0, -moduleWidth, 0) + transLoc + spawnableMeshOffsets[2]);
 
-			static float* nums = new float[maxTiles] {0};
-			srand((unsigned)time(0));
-			for (int i = 0; i < maxTiles; ++i)
+			
+			if (spawnableMeshes.Num() <= spawnableMeshOffsets.Num()) 
 			{
-				if (nums[i] == 0)
+				static float* nums = new float[maxTiles] {0};
+				srand((unsigned)time(0));
+				for (int i = 0; i < maxTiles; ++i)
 				{
+					if (spawnableMeshes.Num() > 3 && i == 0) {
+						nums[i] = 3;
+						meshes[i]->SetStaticMesh(spawnableMeshes[3]);
+						FVector newLocation = FVector(0, -(2 * moduleWidth), 0) + transLoc + spawnableMeshOffsets[3];
+						meshes[i]->SetRelativeLocation(newLocation);
+						continue;
+					}
 					int random_integer = rand() % spawnableMeshes.Num();
 					nums[i] = random_integer;
-					meshes[i]->SetStaticMesh(spawnableMeshes[random_integer]);
-				}
-				else
-				{
+
+					if(i != 0 && i < maxTiles - 1)
+						while(nums[i] == nums[i-1] || nums[i] == nums[i + 1])
+							nums[i] = rand() % spawnableMeshes.Num();
+
 					meshes[i]->SetStaticMesh(spawnableMeshes[nums[i]]);
+					FVector newLocation = FVector(0, -((i + 2) * moduleWidth), 0) + transLoc + spawnableMeshOffsets[nums[i]];
+					meshes[i]->SetRelativeLocation(newLocation);
 				}
-				FVector newLocation = (spawnableMeshOffsets.Num() > i + 3) ? FVector(0, -((i + 2) * moduleWidth), 0) + transLoc + spawnableMeshOffsets[i + 3] : FVector(0, -((i + 2) * moduleWidth), 0) + transLoc;
-				meshes[i]->SetRelativeLocation(newLocation);
 			}
 		}
 
 	}
-	colliders->OnConstruction(Transform);
+	colliders->OnConstruction(Transform, maxTiles);
 }
 
 void ALevelGeneration2::InitializeModules()
@@ -103,7 +112,7 @@ void ALevelGeneration2::InitializeModules()
 	nextModule = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("Next Module"));
 	SetupModule(nextModule);
 
-	for (int i = 0; i < maxTiles; ++i)
+	for (int i = 0; i < 100; ++i)
 	{
 		int index = meshes.Add(CreateDefaultSubobject<UStaticMeshComponent>(("Module" + std::to_string(i)).c_str()));
 		SetupModule(meshes[i]);

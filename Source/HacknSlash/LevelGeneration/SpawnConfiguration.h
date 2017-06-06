@@ -15,7 +15,7 @@ public:
 	// Sets default values for this component's properties
 	USpawnConfiguration();
 
-	TArray<AStaticMeshActor*> spawns;
+	TArray<class ASpawner*> spawns;
 
 protected:
 	// Called when the game starts
@@ -28,20 +28,22 @@ public:
 	void SetLocation(FVector NewLocation);
 
 private:
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Spawns", meta = (AllowPrivateAccess = "true"))
-	int numSpawns;
 		
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Spawns", meta = (AllowPrivateAccess = "true"))
-	FVector spawnLocation;
+	TArray<FVector> spawnLocation;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Spawns", meta = (AllowPrivateAccess = "true"))
-	TSubclassOf<class AEnemyCharacter> spawnableEnemies;
+	TArray<TSubclassOf<class AEnemyCharacter>> spawnableEnemies;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Spawns", meta = (AllowPrivateAccess = "true"))
 	UStaticMesh* spawnMesh;
 	
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Spawns", meta = (AllowPrivateAccess = "true"))
 	float spawnEvery;
-	
-	//AEnemyCharacter* spawnedEnemies[24];
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Spawns", meta = (AllowPrivateAccess = "true"))
+	int maxEnemies;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Spawns", meta = (AllowPrivateAccess = "true"))
+	int numSpawns;
 };

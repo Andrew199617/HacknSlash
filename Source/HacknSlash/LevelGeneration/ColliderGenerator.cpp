@@ -19,15 +19,15 @@ UColliderGenerator::UColliderGenerator()
 	sidewalkOffset = 0;
 }
 
-void UColliderGenerator::OnConstruction(const FTransform& Transform)
+void UColliderGenerator::OnConstruction(const FTransform& Transform, int maxTiles)
 {
 	if (root)
 	{
 		root->SetRelativeTransform(Transform);
-		topCollider->SetRelativeLocation(FVector(sidewalkOffset - 500, 0, 0));
-		botCollider->SetRelativeLocation(FVector(sidewalkOffset + 500, 0, 0));
-		topCollider->SetRelativeScale3D(FVector(.2f, 75, 10));
-		botCollider->SetRelativeScale3D(FVector(.2f, 75, 10));
+		topCollider->SetRelativeLocation(FVector(sidewalkOffset - 500, -(2500 * maxTiles), 0));
+		botCollider->SetRelativeLocation(FVector(sidewalkOffset + 500, -(2500 * maxTiles), 0));
+		topCollider->SetRelativeScale3D(FVector(.2f, 75 + 25 * maxTiles, 10));
+		botCollider->SetRelativeScale3D(FVector(.2f, 75 + 25 * maxTiles, 10));
 	}
 }
 

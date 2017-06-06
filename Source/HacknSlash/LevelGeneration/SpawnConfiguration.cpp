@@ -4,6 +4,7 @@
 #include "SpawnConfiguration.h"
 #include <string>
 #include "Character/EnemyCharacter.h"
+#include "Spawner.h"
 
 
 // Sets default values for this component's properties
@@ -14,9 +15,9 @@ USpawnConfiguration::USpawnConfiguration() : UActorComponent()
 	PrimaryComponentTick.bCanEverTick = true;
 	bEditableWhenInherited = true;
 	// ...
-	numSpawns = 0;
-	spawnLocation = FVector(0,0,0);
+	numSpawns = 2;
 	spawnMesh = 0;
+	maxEnemies = 5;
 }
 
 
@@ -28,20 +29,26 @@ void USpawnConfiguration::BeginPlay()
 	UWorld* world = GetWorld();
 	if (world)
 	{
-		FActorSpawnParameters spawnParams;
 
+		FActorSpawnParameters spawnParams;
 		for(int i = 0; i < numSpawns; ++i)
 		{
 			std::string str = "Spawn" + std::to_string(i + 1);
 			spawnParams.Name = str.c_str();
-			int32 j = spawns.Add(world->SpawnActor<AStaticMeshActor>(spawnParams));
+			int32 j = spawns.Add(world->SpawnActor<ASpawner>(spawnParams));
 			if (spawnMesh)
 			{
-				spawns[j]->GetStaticMeshComponent()->SetStaticMesh(spawnMesh);
-				spawns[j]->SetMobility(EComponentMobility::Movable);
-				spawns[j]->SetActorLocation(spawnLocation);
+				spawns[j]->myMesh->SetStaticMesh(spawnMesh);
 			}
+
+			spawns[j]->maxEnemies = maxEnemies;
+			spawns[j]->enemyClass = spawnableEnemies[0].GetDefaultObject()->GetClass();
+			spawns[j]->spawnEvery = spawnEvery;
+			spawns[j]->myMesh->SetMobility(EComponentMobility::Movable);
+			spawns[j]->SetActorLocation(spawnLocation[i]);
+			spawns[j]->MyBeginPlay();
 		}
+
 	}
 }
 
@@ -50,26 +57,7 @@ void USpawnConfiguration::BeginPlay()
 void USpawnConfiguration::TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction)
 {
 	Super::TickComponent(DeltaTime, TickType, ThisTickFunction);
-	static float m_dt = 0;
-	m_dt += DeltaTime;
-
-	if (m_dt >= spawnEvery)
-	{
-		UWorld* world = GetWorld();
-		if (world)
-		{
-			FActorSpawnParameters spawnParams;
-			spawnParams.Name = "Spawned Enemy";
-			spawnParams.Owner = GetOwner();
-			
-			UClass* enemyClass = spawnableEnemies.Get()->GetClass();
-			UClass* enemyClass1 = spawnableEnemies->GetClass();
-			UClass* enemyClass2 = spawnableEnemies.GetDefaultObject()->GetClass();
-			AEnemyCharacter* spawnedEnemy = world->SpawnActor<AEnemyCharacter>(enemyClass2, spawnParams);
-			spawnedEnemy->SetActorLocation(spawnLocation + FVector(0,-100, 96));
-		}
-		m_dt = 0;
-	}
+	
 }
 
 void USpawnConfiguration::SetLocation(FVector NewLocation)
