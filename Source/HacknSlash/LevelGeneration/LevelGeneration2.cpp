@@ -70,7 +70,7 @@ void ALevelGeneration2::OnConstruction(const FTransform& Transform)
 			
 			if (spawnableMeshes.Num() <= spawnableMeshOffsets.Num()) 
 			{
-				static float* nums = new float[maxTiles] {0};
+				float* nums = new float[maxTiles] {0};
 				srand((unsigned)time(0));
 				for (int i = 0; i < maxTiles; ++i)
 				{
@@ -92,6 +92,8 @@ void ALevelGeneration2::OnConstruction(const FTransform& Transform)
 					FVector newLocation = FVector(0, -((i + 2) * moduleWidth), 0) + transLoc + spawnableMeshOffsets[nums[i]];
 					meshes[i]->SetRelativeLocation(newLocation);
 				}
+
+				delete nums;
 			}
 		}
 

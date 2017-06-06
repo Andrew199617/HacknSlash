@@ -40,13 +40,21 @@ void USpawnConfiguration::BeginPlay()
 			{
 				spawns[j]->myMesh->SetStaticMesh(spawnMesh);
 			}
-
 			spawns[j]->maxEnemies = maxEnemies;
-			spawns[j]->enemyClass = spawnableEnemies[0].GetDefaultObject()->GetClass();
 			spawns[j]->spawnEvery = spawnEvery;
 			spawns[j]->myMesh->SetMobility(EComponentMobility::Movable);
 			spawns[j]->SetActorLocation(spawnLocation[i]);
-			spawns[j]->MyBeginPlay();
+
+			spawnParams.Owner = spawns[j];
+			for (int i2 = 0; i2 < maxEnemies; ++i2)
+			{
+				UClass* enemyClass = spawnableEnemies[i].GetDefaultObject()->GetClass();
+				spawnParams.Name = ("Spawned Enemy" + std::to_string(i) + std::to_string(i2)).c_str();
+				AEnemyCharacter* character = world->SpawnActor<AEnemyCharacter>(enemyClass, spawnParams);
+				int32 k = spawns[j]->spawnedEnemies.Add(character);
+				spawns[j]->spawnedEnemies[k]->SetActorLocation(FVector(0, 0, 100096));
+			}
+
 		}
 
 	}

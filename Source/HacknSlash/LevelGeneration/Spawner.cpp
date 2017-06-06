@@ -13,6 +13,8 @@ ASpawner::ASpawner()
 	PrimaryActorTick.bCanEverTick = true;
 	maxEnemies = 5;
 	curEnemy = 0;
+	enemyToSpawn = 0;
+	spawnRadius = false;
 
 	myMesh = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("Mesh"));
 	myMesh->SetupAttachment(RootComponent);
@@ -20,18 +22,17 @@ ASpawner::ASpawner()
 }
 
 // Called when the game starts or when spawned
-void ASpawner::MyBeginPlay()
+void ASpawner::BeginPlay()
 {
-	UWorld* world = GetWorld();
-	if (world)
-	{
-		FActorSpawnParameters spawnParams;
+	Super::BeginPlay();
 
-		for (int i = 0; i < maxEnemies; ++i)
+	UWorld* world = GetWorld();
+	if (world && enemyToSpawn)
+	{
+		for (int i2 = 0; i2 < maxEnemies; ++i2)
 		{
-			spawnParams.Name = ("Spawned Enemy" + std::to_string(i)).c_str();
-			int j = spawnedEnemies.Add(world->SpawnActor<AEnemyCharacter>(enemyClass, spawnParams));
-			spawnedEnemies[j]->SetActorLocation(FVector(0, 0, 100096));
+			AEnemyCharacter* character = world->SpawnActor<AEnemyCharacter>(enemyToSpawn, FVector(0, 0, 100096), GetActorRotation());
+			spawnedEnemies.Add(character);
 		}
 	}
 }
@@ -41,13 +42,27 @@ void ASpawner::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
 	static float m_dt = 0;
-	m_dt += DeltaTime;
-
-	if (m_dt >= spawnEvery && curEnemy < maxEnemies)
-	{
-		spawnedEnemies[curEnemy]->SetActorLocation(GetActorLocation() + FVector(0, 0, 96));
-		curEnemy++;
-		m_dt = 0;
+	if (spawnRadius || !enemyToSpawn) {
+		m_dt += DeltaTime;
+		if (m_dt >= spawnEvery && curEnemy < maxEnemies)
+		{
+			spawnedEnemies[curEnemy]->SetActorLocation(GetActorLocation() + FVector(0, 0, 96));
+			curEnemy++;
+			m_dt = 0;
+		}
 	}
+
+}
+
+void ASpawner::NotifyActorBeginOverlap(AActor* OtherActor)
+{
+	Super::NotifyActorBeginOverlap(OtherActor);
+	spawnRadius = true;
+}
+
+void ASpawner::NotifyActorEndOverlap(AActor* OtherActor)
+{
+	Super::NotifyActorEndOverlap(OtherActor);
+	spawnRadius = false;
 }
 
